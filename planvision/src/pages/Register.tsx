@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -25,56 +26,78 @@ const Register = () => {
       }
 
       console.log("Registrierung erfolgreich:", userCredential.user);
-      navigate("/login"); // Nach erfolgreicher Registrierung zum Login navigieren
+      navigate("/login");
     } catch (err: any) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-green-600">Registrieren</h1>
-      <form onSubmit={handleRegister} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Vorname"
-          className="border p-2 rounded"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nachname"
-          className="border p-2 rounded"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Passwort"
-          className="border p-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+      <div className="w-full max-w-md bg-white border p-6 sm:p-12 rounded-xl shadow-md">
+        <div className="flex justify-center mb-8">
+          <Link to="/login">
+            <img src={logo} alt="Logo" className="h-14 sm:h-16 cursor-pointer" />
+          </Link>
+        </div>
+
+        <h2 className="text-xl sm:text-2xl font-semibold text-center text-gray-700 mb-6">
+          Neuen Account erstellen
+        </h2>
+
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
+          <input
+            type="text"
+            placeholder="Vorname"
+            className="border p-3 rounded-md text-sm"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nachname"
+            className="border p-3 rounded-md text-sm"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="E-Mail Adresse"
+            className="border p-3 rounded-md text-sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            className="border p-3 rounded-md text-sm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button
+            type="submit"
+            style={{ backgroundColor: "#e8562a" }}
+            className="text-white py-2 rounded-md hover:bg-white hover:border hover:border-[#e8562a] transition"
+          >
+            Registrieren
+          </button>
+
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+        </form>
+
         <button
-          type="submit"
-          className="bg-green-600 text-white py-2 rounded hover:bg-green-700"
+          onClick={() => navigate("/login")}
+          style={{ backgroundColor: "transparent", border: "1px solid #ccc" }}
+          className="w-full text-gray-600 py-2 mt-6 rounded hover:bg-gray-100 transition text-sm"
         >
-          Registrieren
+          Zurück zum Login
         </button>
-        {error && <p className="text-red-600">{error}</p>}
-      </form>
+      </div>
     </div>
   );
 };

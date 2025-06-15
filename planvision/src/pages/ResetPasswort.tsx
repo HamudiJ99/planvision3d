@@ -2,7 +2,7 @@ import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom"; // 👈 Link importieren
+import { Link } from "react-router-dom";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -23,17 +23,17 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="p-8 max-w-xl mx-auto">
-      <div className="border p-10 rounded-xl shadow-md bg-white">
-        <div className="flex justify-center mb-16">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
+      <div className="w-full max-w-md bg-white border p-6 sm:p-10 rounded-xl shadow-md">
+        <div className="flex justify-center mb-12">
           <Link to="/login">
-            <img src={logo} alt="Logo" className="h-16 cursor-pointer" />
+            <img src={logo} alt="Logo" className="h-14 sm:h-16 cursor-pointer" />
           </Link>
         </div>
-        <h2 className="text-2xl font-bold mb-4 text-center text-[#e8562a]">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center text-[#e8562a]">
           Passwort vergessen?
         </h2>
-        <p className="mb-6 text-center text-gray-700">
+        <p className="mb-6 text-center text-gray-700 text-sm sm:text-base">
           Du hast dein Passwort vergessen? Kein Problem! Gib einfach deine E-Mail-Adresse ein
           und wir senden dir eine E-Mail mit einem Link zum Zurücksetzen.
         </p>
@@ -43,17 +43,17 @@ const ResetPassword = () => {
             placeholder="E-Mail-Adresse"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border p-4 rounded-md"
+            className="border p-3 rounded-md text-sm"
             required
           />
           <button
             type="submit"
-            className="bg-[#e8562a] text-white py-2 rounded hover:bg-orange-600"
+            className="bg-[#e8562a] text-white py-2 rounded-md hover:bg-orange-600 transition"
           >
             Zurücksetzen
           </button>
-          {message && <p className="text-green-600 text-center">{message}</p>}
-          {error && <p className="text-red-600 text-center">{error}</p>}
+          {message && <p className="text-green-600 text-center text-sm">{message}</p>}
+          {error && <p className="text-red-600 text-center text-sm">{error}</p>}
         </form>
       </div>
     </div>
