@@ -12,6 +12,22 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+// Firebase Einrichtung:
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db, storage } from "../../firebase"; // dein Firebase-Pfad
+import {
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
+
+
 const Firmendaten = () => {
   const navigate = useNavigate();
 
@@ -25,6 +41,34 @@ const Firmendaten = () => {
   const [error, setError] = useState<string | null>(null);
   const [showVideo, setShowVideo] = useState(false);
 
+
+// Daten laden beim Öffnen der Seite
+
+
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+
+    const docRef = doc(db, "firmen", user.uid);
+    const snapshot = await getDoc(docRef);
+
+    if (snapshot.exists()) {
+      const data = snapshot.data();
+      setFirma(data.firma || "");
+      setAnschrift(data.anschrift || "");
+      setAdresse(data.adresse || "");
+      setLand(data.land || "");
+      if (data.logoUrl) setLogoPreview(data.logoUrl);
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
+
+
+
   useEffect(() => {
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -34,7 +78,6 @@ const Firmendaten = () => {
   window.addEventListener("keydown", handleKeyDown);
   return () => window.removeEventListener("keydown", handleKeyDown);
 }, []);
-
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -53,9 +96,46 @@ const Firmendaten = () => {
     }
   };
 
-  const handleSpeichern = () => {
-    alert("Firmendaten gespeichert!");
-  };
+const handleSpeichern = async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    setError("Du musst eingeloggt sein.");
+    return;
+  }
+
+  try {
+    let logoUrl = null;
+
+    if (logoPreview) {
+      // Prüfen, ob es bereits eine Firebase Storage URL ist
+      if (logoPreview.startsWith("https://firebasestorage.googleapis.com/")) {
+        logoUrl = logoPreview; // bereits hochgeladen → wiederverwenden
+      } else {
+        // sonst: base64 in Blob umwandeln und neu hochladen
+        const blob = await (await fetch(logoPreview)).blob();
+        const storageRef = ref(storage, `firmenlogos/${user.uid}`);
+        await uploadBytes(storageRef, blob);
+        logoUrl = await getDownloadURL(storageRef);
+      }
+    }
+
+    const firmendaten = {
+      firma,
+      anschrift,
+      adresse,
+      land,
+      logoUrl,
+    };
+
+    await setDoc(doc(db, "firmen", user.uid), firmendaten);
+
+    alert("Firmendaten erfolgreich gespeichert!");
+  } catch (err) {
+    console.error(err);
+    setError("Fehler beim Speichern der Daten.");
+  }
+};
+
 
   const handleWeiter = () => {
     navigate("/team");
