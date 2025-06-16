@@ -140,7 +140,7 @@ const Dashboard = () => {
               <button
                 onClick={() => {
                   setStep(1);
-                  navigate("/contacts/company");
+                  navigate("/firmendaten");
                 }}
                 className="next-button flex items-center gap-2 bg-[#e8562a] text-white px-5 py-2 rounded-md hover:bg-[#cf3e17] transition"
               >

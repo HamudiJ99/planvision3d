@@ -5,6 +5,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import ResetPassword from './pages/ResetPasswort'
+import Firmendaten from "./pages/Kontaktdaten/Firmendaten"
+import Team from "./pages/Kontaktdaten/Firmendaten"
 
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/firmendaten" element={<Firmendaten />} />
+        <Route path="/team" element={<Team />} />
       </Routes>
     </Router>
   );
