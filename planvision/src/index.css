@@ -47,6 +47,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+/*
 button:hover {
   border-color: #ad3612;
 }
@@ -54,6 +55,44 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+*/
+
+.navbar-button {
+  background-color: transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1.3em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.next-button {
+  background-color: #e8562a;
+  color: #ffffff;
+}
+
+.next-button:hover {
+  background-color: rgba(232, 86, 42, 0.842);
+  color: #ffffff;
+}
+.navbar-downlinks-button {
+  background-color: transparent;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+
+.navbar-downlinks-button:focus,
+.navbar-downlinks-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
