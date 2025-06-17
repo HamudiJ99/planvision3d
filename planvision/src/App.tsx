@@ -6,7 +6,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import ResetPassword from './pages/ResetPasswort'
 import Firmendaten from "./pages/Kontaktdaten/Firmendaten"
-import Team from "./pages/Kontaktdaten/Firmendaten"
+import Team from "./pages/Kontaktdaten/Team"
 
 
 function App() {

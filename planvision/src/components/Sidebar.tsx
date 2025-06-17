@@ -71,8 +71,12 @@ const Sidebar = ({ activePage, activeSubPage }: SidebarProps) => {
                 Firmendaten
               </button>
               <button
-                disabled
-                className="navbar-downlinks-button text-md rounded-md px-3 py-1 w-full text-left text-white/30 cursor-not-allowed"
+                onClick={() => handleNavigate("/team", false)}
+                className={`navbar-downlinks-button text-md rounded-md px-3 py-1 w-full text-left ${
+                  activePage === "contacts" && activeSubPage === "team"
+                    ? "text-white font-semibold cursor-pointer"
+                    : "text-white/70 hover:text-white cursor-pointer"
+                }`}
               >
                 Team
               </button>
