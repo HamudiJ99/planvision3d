@@ -104,6 +104,7 @@ const handleSpeichern = async () => {
   }
 
   try {
+    setError(null); // Reset error state
     let logoUrl = null;
 
     if (logoPreview) {
@@ -112,10 +113,21 @@ const handleSpeichern = async () => {
         logoUrl = logoPreview; // bereits hochgeladen → wiederverwenden
       } else {
         // sonst: base64 in Blob umwandeln und neu hochladen
-        const blob = await (await fetch(logoPreview)).blob();
-        const storageRef = ref(storage, `firmenlogos/${user.uid}`);
-        await uploadBytes(storageRef, blob);
-        logoUrl = await getDownloadURL(storageRef);
+        try {
+          // Bessere Blob-Konvertierung für base64 data URLs
+          const response = await fetch(logoPreview);
+          if (!response.ok) {
+            throw new Error('Failed to convert image data');
+          }
+          const blob = await response.blob();
+          
+          const storageRef = ref(storage, `firmenlogos/${user.uid}`);
+          const uploadResult = await uploadBytes(storageRef, blob);
+          logoUrl = await getDownloadURL(uploadResult.ref);
+        } catch (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw new Error('Fehler beim Hochladen des Logos');
+        }
       }
     }
 
@@ -131,8 +143,8 @@ const handleSpeichern = async () => {
 
     alert("Firmendaten erfolgreich gespeichert!");
   } catch (err) {
-    console.error(err);
-    setError("Fehler beim Speichern der Daten.");
+    console.error('Speichern Fehler:', err);
+    setError(err instanceof Error ? err.message : "Fehler beim Speichern der Daten.");
   }
 };
 
